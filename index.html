@@ -1,0 +1,991 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#080611">
+<title>Escapa Tom | Comunidad Tom</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- INICIO -->
+<main id="inicio" class="pantalla inicio">
+  <img src="inicio/fondoinicio.png" class="fondo-inicio" alt="">
+  <img src="inicio/titulo.png" class="titulo" alt="Escapa Tom">
+  <a href="#niveles" class="play">
+    <img src="inicio/iniciarjuego.png" alt="Jugar">
+  </a>
+  <a href="#ayuda" class="pregunta">
+    <img src="inicio/comojugar.png" alt="Cómo jugar">
+  </a>
+</main>
+
+<!-- AYUDA -->
+<section id="ayuda" class="pantalla ayuda">
+  <div class="contenedor-ayuda">
+    <img src="inicio/info.png" alt="Instrucciones">
+    <a href="#inicio" class="cerrar-ayuda" aria-label="Volver"></a>
+  </div>
+</section>
+
+<!-- NIVELES -->
+<section id="niveles" class="pantalla niveles">
+  <div class="contenedor-niveles">
+    <img src="inicio/Niveles.png" class="imagen-niveles" alt="Niveles">
+    <a href="#jugar" class="seleccionar-nivel1" aria-label="Jugar nivel 1"></a>
+    <a href="#inicio" class="volver-niveles" aria-label="Volver al inicio">
+      <img src="inicio/Volver.png" alt="Volver">
+    </a>
+  </div>
+</section>
+
+<!-- JUEGO -->
+<section id="jugar" class="pantalla juego">
+  <div id="escenario" class="escenario">
+
+    <!-- FONDOS -->
+    <div class="fondo-granja"></div>
+    <div class="fondo-granja-lluvia"></div>
+
+    <!-- SUELO -->
+    <div class="zona-suelo">
+      <div class="suelo-movimiento"></div>
+    </div>
+
+    <!-- CINEMATICA GHOST -->
+    <div class="ghost-arbusto">
+      <img src="ghost/arbustoframe1.png" class="arbusto-frame arbusto-1" alt="">
+      <img src="ghost/arbustoframe2.png" class="arbusto-frame arbusto-2" alt="">
+      <img src="ghost/arbustoframe3.png" class="arbusto-frame arbusto-3" alt="">
+    </div>
+
+    <!-- CINEMATICA TOM -->
+    <div class="tom-cinematica">
+      <img src="tom/tomcurioso.png" class="tom-curioso" alt="">
+      <img src="tom/tomasustado.png" class="tom-asustado" alt="">
+    </div>
+
+    <!-- GHOST -->
+    <div id="ghostJugador" class="ghost-corriendo corredor">
+
+      <!-- SALTO INDEPENDIENTE -->
+      <div class="ghost-salto-contenedor">
+        <img
+          id="ghostImagenSalto"
+          src="ghost/ghostsalto1.png"
+          class="ghost-imagen-salto"
+          alt=""
+          draggable="false"
+        >
+      </div>
+
+      <!-- FRAMES DE CARRERA -->
+      <img src="ghost/GhostRunFrame1.png" class="frame frame1" alt="">
+      <img src="ghost/GhostRunFrame2.png" class="frame frame2" alt="">
+      <img src="ghost/GhostRunFrame3.png" class="frame frame3" alt="">
+      <img src="ghost/GhostRunFrame4.png" class="frame frame4" alt="">
+    </div>
+
+    <!-- TOM -->
+    <div id="tomJugador" class="tom-jugador">
+      <div class="tom-salto">
+
+        <div class="tom-corriendo">
+          <img src="tom/TomRunFrame1.png" class="frame frame1" alt="">
+          <img src="tom/TomRunFrame2.png" class="frame frame2" alt="">
+          <img src="tom/TomRunFrame3.png" class="frame frame3" alt="">
+          <img src="tom/TomRunFrame4.png" class="frame frame4" alt="">
+        </div>
+
+        <div class="tom-saltando">
+          <img src="tom/TomJumpFrame1.png" class="jump-frame jump1" alt="">
+          <img src="tom/TomJumpFrame2.png" class="jump-frame jump2" alt="">
+          <img src="tom/TomJumpFrame3.png" class="jump-frame jump3" alt="">
+          <img src="tom/TomJumpFrame4.png" class="jump-frame jump4" alt="">
+          <img src="tom/TomJumpFrame5.png" class="jump-frame jump5" alt="">
+        </div>
+
+      </div>
+    </div>
+
+    <!-- GRANERO FINAL -->
+    <img src="level1/graneropuerta.png" class="granero-final" alt="Granero de Halloween" draggable="false">
+
+    <!-- RECORRIDO -->
+    <div class="hud-recorrido">
+      <img src="level1/recorrido.png" alt="Recorrido">
+      <div id="recorridoOscuro" class="recorrido-oscuro"></div>
+      <span id="porcentajeRecorrido" class="porcentaje-recorrido">0%</span>
+    </div>
+
+    <!-- OBSTACULOS -->
+    <div id="obstaculos" class="capa-obstaculos"></div>
+
+    <!-- CARTELES -->
+    <img src="level1/textoCorre.png" class="cartel-corre" alt="¡Corre!">
+    <img src="level1/tutorial.png" class="cartel-tutorial" alt="Tutorial">
+
+    <!-- TORMENTA -->
+    <div class="lluvia-halloween"></div>
+    <div class="relampago-halloween"></div>
+
+    <!-- PAUSA -->
+    <a href="#pausa" class="boton-pausa" aria-label="Pausar">
+      <img src="level1/Pause.png" alt="Pausa">
+    </a>
+
+  </div>
+  <!-- CINEMATICA FINAL: 6 ESCENAS DE 4 SEGUNDOS -->
+  <div id="cinematicaFinal" class="cinematica-final" aria-hidden="true">
+    <div class="escena-final escena-final-1">
+      <img src="finallevel1/escenafinal1.png" alt="Escena final 1" draggable="false">
+      <div class="destello-final"></div>
+      <div class="dialogo-final"><strong>¡CORRE, TOM!</strong><p>¡EL GRANERO ESTÁ JUSTO ADELANTE!</p></div>
+    </div>
+    <div class="escena-final escena-final-2">
+      <img src="finallevel1/escenafinal2.png" alt="Escena final 2" draggable="false">
+      <div class="dialogo-final"><strong>TOM</strong><p>¡SHHH! NO HAGAS NI UN RUIDO...</p></div>
+    </div>
+    <div class="escena-final escena-final-3">
+      <img src="finallevel1/escenafinal3.png" alt="Escena final 3" draggable="false">
+      <div class="dialogo-final"><strong>¡CUIDADO!</strong><p>GHOST ESTÁ CADA VEZ MÁS CERCA...</p></div>
+    </div>
+    <div class="escena-final escena-final-4">
+      <img src="finallevel1/escenafinal4.png" alt="Escena final 4" draggable="false">
+      <div class="dialogo-final"><strong>TOM</strong><p>¡UF! CREO QUE YA SE FUE...</p></div>
+    </div>
+    <div class="escena-final escena-final-5">
+      <img src="finallevel1/escenafinal5.png" alt="Escena final 5" draggable="false">
+      <div class="flash-susto-final"></div>
+      <div class="dialogo-final"><strong>¡GHOST!</strong><p>¡¡¡AAAAAAAH!!!</p></div>
+    </div>
+    <div class="escena-final escena-final-6">
+      <img src="finallevel1/escenafinal6.png" alt="Escena final 6" draggable="false">
+      <div class="dialogo-final"><strong>¡SORPRESA!</strong><p>¿¡MISTY!? ¿¡ERAS VOS!?</p><small>¡JAJAJA! ¡FELIZ HALLOWEEN, TOM!</small></div>
+    </div>
+  </div>
+</section>
+
+<!-- MENU PAUSA -->
+<section id="pausa" class="pantalla pausa">
+  <div class="contenedor-pausa">
+    <img src="level1/menupause.png" class="imagen-menu-pausa" alt="Pausa">
+    <a href="#jugar" class="seguir-jugando" aria-label="Seguir jugando"></a>
+    <a href="#inicio" class="volver-inicio-pausa" aria-label="Volver al inicio"></a>
+  </div>
+</section>
+
+<!-- GAME OVER -->
+<section id="derrota" class="pantalla pantalla-resultado derrota">
+  <div class="gameover-contenido">
+    <h1 class="gameover-respaldo">GAME OVER</h1>
+    <img src="level1/GameOver.png" class="imagen-gameover" alt="Game Over">
+    <p id="progresoDerrota" class="texto-recorrido-derrota">Recorrido: 0%</p>
+    <div class="contenedor-botones-gameover">
+      <img src="level1/botonesgameover.png" class="imagen-botones-gameover" alt="">
+      <a href="#jugar" class="zona-reintentar" aria-label="Reintentar"></a>
+      <a href="#inicio" class="zona-volver-inicio" aria-label="Volver al inicio"></a>
+    </div>
+  </div>
+</section>
+
+<!-- PANTALLA GANADORA -->
+<section id="victoria" class="pantalla pantalla-resultado victoria">
+  <div class="pantalla-ganadora-contenedor">
+    <img src="level1/pantallaganadora.png" class="imagen-pantalla-ganadora"
+         alt="Tom pudo esconderse de Ghost. Muchas felicidades, lograste salvarlo.">
+    <a class="whatsapp-ganador"
+       href="https://wa.me/5491162804382?text=Complete%20el%20juego%20de%20Escapa%20Tom%2C%20quiero%20mi%20premio."
+       target="_blank" rel="noopener noreferrer"
+       aria-label="Reclamar premio por WhatsApp"></a>
+  </div>
+</section>
+
+<!-- CONTROL DE SONIDO GLOBAL: visible durante el juego y la cinematica final -->
+  <button id="botonSonidoInicio" class="boton-sonido-inicio" type="button" aria-label="Silenciar sonido" aria-pressed="true">
+    <img id="iconoSonidoInicio" src="inicio/audio.png" alt="Sonido activado">
+  </button>
+
+<!-- AUDIOS: deben estar dentro de la carpeta sonidoaudio -->
+<audio id="audioInicio" src="sonidoaudio/musicainicio.mp4" preload="auto" loop playsinline></audio>
+<audio id="audioSusto" src="sonidoaudio/cinematicasusto.mp4" preload="auto" playsinline></audio>
+<audio id="audioCorrer" src="sonidoaudio/musicacorrer.mp4" preload="auto" loop playsinline></audio>
+
+<!-- AUDIOS DE LA CINEMATICA FINAL -->
+<audio id="audioFinalPrincipal" src="soundfinal/escena1sound.mp4" preload="auto" playsinline></audio>
+<audio id="audioFinalSusto" src="soundfinal/escena5sound.mp4" preload="auto" playsinline></audio>
+<audio id="audioFinalMisty" src="soundfinal/escena6sound.mp4" preload="auto" playsinline></audio>
+
+<script>
+"use strict";
+
+/* ELEMENTOS */
+const escenario = document.getElementById("escenario");
+const tom = document.getElementById("tomJugador");
+const ghost = document.getElementById("ghostJugador");
+const ghostImagenSalto = document.getElementById("ghostImagenSalto");
+const capaObstaculos = document.getElementById("obstaculos");
+const recorridoOscuro = document.getElementById("recorridoOscuro");
+const porcentajeRecorrido = document.getElementById("porcentajeRecorrido");
+const progresoDerrota = document.getElementById("progresoDerrota");
+
+/* CONFIGURACION */
+const DURACION_NIVEL = 90000; // ORIGINAL: 90 segundos, empieza en 0%
+const DURACION_FINAL = 8000; // Cinemática final de 8 segundos
+const DURACION_CINEMATICA = 6000;
+const DURACION_ESCENA_FINAL = 4000;
+const CANTIDAD_ESCENAS_FINAL = 6;
+const DURACION_SALTO = 800;
+const DURACION_SALTO_GHOST = 850;
+const VELOCIDAD_VALLAS = 290;
+const DURACION_TUTORIAL = 4000;
+const INICIO_TORMENTA = DURACION_NIVEL * 0.5;
+
+/* IMAGENES GHOST */
+const FRAMES_GHOST_SALTO = [
+  "ghost/ghostsalto1.png",
+  "ghost/ghostsalto2.png",
+  "ghost/ghostsalto3.png"
+];
+
+/* PRECARGAR IMAGENES */
+const imagenesGhost = FRAMES_GHOST_SALTO.map(ruta => {
+  const imagen = new Image();
+  imagen.src = ruta;
+  return imagen;
+});
+
+/* OBSTACULOS */
+// Dificultad progresiva, sin aumentar la velocidad del juego.
+// Cada pareja tiene separacion suficiente para aterrizar y volver a saltar.
+const TIEMPOS_VALLAS = [
+  // 0-20%: individuales espaciadas (0-18 s)
+  5, 9.2, 13.4, 17.2,
+  // 20-50%: mas frecuentes, aun faciles (18-45 s)
+  20.5, 23.8, 27.1, 30.5, 33.9, 37.3, 40.7, 44.0,
+  // 50-70%: lluvia y primeras parejas (45-63 s)
+  47.4, 50.6, 52.5, 56.1, 59.7, 61.6,
+  // 70-90%: individuales alternadas con parejas (63-81 s)
+  65.5, 68.8, 70.7, 74.4, 77.8, 79.7,
+  // 90-100%: cierre tranquilo antes del granero (81-90 s)
+  83.6, 87.3
+];
+
+/* VARIABLES */
+let estado = "inicio";
+let tiempoNivel = 0;
+let tiempoCinematica = 0;
+let tiempoFinal = 0;
+let tiempoEscenasFinal = 0;
+let escenaFinalActual = -1;
+let tiempoSalto = 0;
+let tiempoGhost = 0;
+let siguienteValla = 0;
+let vallas = [];
+let ultimoFrame = 0;
+let animacion = null;
+let saltando = false;
+let ghostSaltando = false;
+let pausado = false;
+let ultimoHash = location.hash;
+let tutorialMostrado = false;
+let tormentaActiva = false;
+let siguienteTrueno = 0;
+let tiempoFlash = 0;
+let frameGhostActual = -1;
+
+let contextoAudio = null;
+let bufferTrueno = null;
+
+/* CONTROL DE MUSICA Y EFECTOS */
+const audioInicio = document.getElementById("audioInicio");
+const audioSusto = document.getElementById("audioSusto");
+const audioCorrer = document.getElementById("audioCorrer");
+const botonSonidoInicio = document.getElementById("botonSonidoInicio");
+const iconoSonidoInicio = document.getElementById("iconoSonidoInicio");
+const audioFinalPrincipal = document.getElementById("audioFinalPrincipal");
+const audioFinalSusto = document.getElementById("audioFinalSusto");
+const audioFinalMisty = document.getElementById("audioFinalMisty");
+const cinematicaFinal = document.getElementById("cinematicaFinal");
+const escenasFinales = [...cinematicaFinal.querySelectorAll(".escena-final")];
+const pistas = [audioInicio, audioSusto, audioCorrer, audioFinalPrincipal, audioFinalSusto, audioFinalMisty];
+let sonidoActivado = true;
+let sonidoDesbloqueado = false;
+let sustoReproducido = false;
+let pistaActual = null;
+
+function pararPistas() {
+  pistas.forEach(pista => {
+    pista.pause();
+    try { pista.currentTime = 0; } catch(e) {}
+  });
+  pistaActual = null;
+}
+
+function reproducirPista(pista, reiniciar = false) {
+  if (pistaActual !== pista) {
+    pistas.forEach(otra => { if (otra !== pista) otra.pause(); });
+    pistaActual = pista;
+    reiniciar = true;
+  }
+  if (reiniciar) {
+    try { pista.currentTime = 0; } catch(e) {}
+  }
+  pista.muted = !sonidoActivado;
+  if (!sonidoDesbloqueado || pausado) return;
+  if (!pista.paused) return;
+  const intento = pista.play();
+  if (intento && typeof intento.catch === "function") {
+    intento.catch(err => console.warn("No se pudo reproducir el audio:", pista.src, err));
+  }
+}
+
+function sincronizarMusica() {
+  pistas.forEach(p => { p.muted = !sonidoActivado; });
+  if (!sonidoDesbloqueado) {
+    pistas.forEach(p => p.pause());
+    return;
+  }
+  if (pausado) { pistas.forEach(p => p.pause()); return; }
+  if (estado === "jugando") reproducirPista(audioCorrer);
+  else if (estado === "cinematica") {
+    reproducirPista(audioSusto);
+  } else if (estado === "final") reproducirPista(audioCorrer);
+  else if (estado === "finalEscenas") {
+    if (escenaFinalActual < 4) reproducirPista(audioFinalPrincipal);
+    else if (escenaFinalActual === 4) reproducirPista(audioFinalSusto);
+    else reproducirPista(audioFinalMisty);
+  }
+  else if (["inicio", "niveles", "ayuda"].includes(estado)) reproducirPista(audioInicio);
+  else pararPistas();
+}
+
+function desbloquearSonido() {
+  sonidoDesbloqueado = true;
+  habilitarAudio();
+  sincronizarMusica();
+}
+
+function actualizarBotonSonido() {
+  iconoSonidoInicio.src = sonidoActivado ? "inicio/audio.png" : "inicio/mute.png";
+  iconoSonidoInicio.alt = sonidoActivado ? "Sonido activado" : "Sonido silenciado";
+  botonSonidoInicio.setAttribute("aria-label", sonidoActivado ? "Silenciar sonido" : "Activar sonido");
+  botonSonidoInicio.setAttribute("aria-pressed", String(sonidoActivado));
+}
+
+botonSonidoInicio.addEventListener("click", () => {
+  sonidoActivado = !sonidoActivado;
+  actualizarBotonSonido();
+  desbloquearSonido();
+});
+
+/* AUDIO */
+function habilitarAudio() {
+  try {
+    const AudioCtx = window.AudioContext || window.webkitAudioContext;
+    if (!AudioCtx) return;
+
+    if (!contextoAudio) contextoAudio = new AudioCtx();
+
+    if (contextoAudio.state === "suspended") {
+      contextoAudio.resume().catch(() => {});
+    }
+  } catch(e) {
+    console.warn("Audio no disponible",e);
+  }
+}
+
+function prepararTrueno() {
+  if (!contextoAudio || bufferTrueno) return;
+
+  const ctx = contextoAudio;
+  const muestras = Math.floor(ctx.sampleRate * .9);
+  bufferTrueno = ctx.createBuffer(1,muestras,ctx.sampleRate);
+
+  const datos = bufferTrueno.getChannelData(0);
+  let ruido = 0;
+
+  for (let i=0;i<muestras;i++) {
+    ruido = ruido*.91 + (Math.random()*2-1)*.09;
+    datos[i] = ruido*Math.pow(1-i/muestras,1.8);
+  }
+}
+
+function sonarTrueno() {
+  if (!sonidoActivado || !contextoAudio || contextoAudio.state !== "running") return;
+
+  try {
+    prepararTrueno();
+
+    const ctx = contextoAudio;
+    const fuente = ctx.createBufferSource();
+    const filtro = ctx.createBiquadFilter();
+    const volumen = ctx.createGain();
+
+    fuente.buffer = bufferTrueno;
+    filtro.type = "lowpass";
+    filtro.frequency.value = 280;
+    volumen.gain.value = .30;
+
+    fuente.connect(filtro);
+    filtro.connect(volumen);
+    volumen.connect(ctx.destination);
+    fuente.start();
+  } catch(e) {
+    console.warn("Error de trueno",e);
+  }
+}
+
+/* TORMENTA */
+function iniciarTormenta() {
+  if (tormentaActiva) return;
+
+  tormentaActiva = true;
+  escenario.classList.add("tormenta-halloween");
+  siguienteTrueno = tiempoNivel + 1800;
+}
+
+function actualizarTormenta(dt) {
+  if (!tormentaActiva) {
+    if (tiempoNivel >= INICIO_TORMENTA) iniciarTormenta();
+    return;
+  }
+
+  if (tiempoFlash > 0) {
+    tiempoFlash -= dt;
+
+    if (tiempoFlash <= 0) {
+      escenario.classList.remove("flash-trueno");
+      tiempoFlash = 0;
+    }
+  }
+
+  if (tiempoNivel >= siguienteTrueno) {
+    escenario.classList.add("flash-trueno");
+    tiempoFlash = 350;
+    sonarTrueno();
+    siguienteTrueno = tiempoNivel + 7000 + Math.random()*4000;
+  }
+}
+
+/* TUTORIAL */
+function actualizarTutorial() {
+  if (!tutorialMostrado && tiempoNivel >= DURACION_TUTORIAL) {
+    escenario.classList.remove("mostrar-tutorial");
+    tutorialMostrado = true;
+  }
+}
+
+/* RECORRIDO */
+function actualizarBarra() {
+  const porcentaje = Math.min(
+    100,
+    Math.floor(tiempoNivel/DURACION_NIVEL*100)
+  );
+
+  porcentajeRecorrido.textContent = porcentaje+"%";
+  recorridoOscuro.style.width = (100-porcentaje)+"%";
+}
+
+/* REINICIAR */
+function limpiarNivel() {
+  if (animacion !== null) {
+    cancelAnimationFrame(animacion);
+    animacion = null;
+  }
+
+  capaObstaculos.replaceChildren();
+  vallas = [];
+
+  tiempoNivel = 0;
+  tiempoCinematica = 0;
+  tiempoFinal = 0;
+  tiempoEscenasFinal = 0;
+  escenaFinalActual = -1;
+  cinematicaFinal.classList.remove("visible");
+  cinematicaFinal.setAttribute("aria-hidden", "true");
+  escenasFinales.forEach(e => e.classList.remove("activa"));
+  sustoReproducido = false;
+  tiempoSalto = 0;
+  tiempoGhost = 0;
+  siguienteValla = 0;
+  siguienteTrueno = 0;
+  tiempoFlash = 0;
+
+  saltando = false;
+  ghostSaltando = false;
+  pausado = false;
+  tutorialMostrado = false;
+  tormentaActiva = false;
+  frameGhostActual = -1;
+
+  ghostImagenSalto.src = FRAMES_GHOST_SALTO[0];
+
+  escenario.classList.remove(
+    "cinematica",
+    "jugando",
+    "saltando",
+    "ghost-saltando",
+    "pausado",
+    "mostrar-tutorial",
+    "tormenta-halloween",
+    "flash-trueno",
+    "final-cinematica"
+  );
+
+  actualizarBarra();
+}
+
+/* INICIAR */
+function iniciarNivel() {
+  limpiarNivel();
+  estado = "cinematica";
+  sustoReproducido = true;
+  escenario.classList.add("cinematica");
+  sincronizarMusica();
+  ultimoFrame = performance.now();
+  animacion = requestAnimationFrame(bucle);
+}
+
+function empezarCarrera() {
+  escenario.classList.remove("cinematica");
+  escenario.classList.add("jugando","mostrar-tutorial");
+  estado = "jugando";
+  sincronizarMusica();
+}
+
+/* SALTO TOM */
+function saltar() {
+  if (estado !== "jugando" || pausado || saltando) return;
+
+  saltando = true;
+  tiempoSalto = 0;
+
+  escenario.classList.remove("saltando");
+  void tom.offsetWidth;
+  escenario.classList.add("saltando");
+}
+
+/* SALTO GHOST - NUEVO SISTEMA */
+function saltarGhost() {
+  if (ghostSaltando || estado !== "jugando" || pausado) return;
+
+  ghostSaltando = true;
+  tiempoGhost = 0;
+  frameGhostActual = -1;
+
+  ghostImagenSalto.src = FRAMES_GHOST_SALTO[0];
+
+  escenario.classList.remove("ghost-saltando");
+
+  /* Reinicia solamente la animacion del personaje */
+  void ghost.offsetWidth;
+
+  escenario.classList.add("ghost-saltando");
+
+  actualizarImagenGhost();
+}
+
+/* CAMBIO DE FRAMES SIN SUPERPOSICIONES */
+function actualizarImagenGhost() {
+  if (!ghostSaltando) return;
+
+  const progreso = Math.min(
+    1,
+    tiempoGhost / DURACION_SALTO_GHOST
+  );
+
+  let nuevoFrame;
+
+  if (progreso < 1/3) {
+    nuevoFrame = 0;
+  } else if (progreso < 2/3) {
+    nuevoFrame = 1;
+  } else {
+    nuevoFrame = 2;
+  }
+
+  if (nuevoFrame !== frameGhostActual) {
+    frameGhostActual = nuevoFrame;
+    ghostImagenSalto.src = FRAMES_GHOST_SALTO[nuevoFrame];
+  }
+}
+
+function terminarSaltoGhost() {
+  ghostSaltando = false;
+  tiempoGhost = 0;
+  frameGhostActual = -1;
+
+  escenario.classList.remove("ghost-saltando");
+}
+
+/* OBSTACULOS */
+function crearValla() {
+  const elemento = document.createElement("div");
+  elemento.className = "valla";
+
+  const imagen = document.createElement("img");
+  imagen.src = "level1/Obstaculo.png";
+  imagen.alt = "";
+  imagen.draggable = false;
+
+  elemento.appendChild(imagen);
+  capaObstaculos.appendChild(elemento);
+
+  const x = escenario.clientWidth+90;
+  elemento.style.left = x+"px";
+
+  vallas.push({
+    elemento,
+    x,
+    ghostPaso:false
+  });
+}
+
+/* COLISIONES */
+function rectColisionTom() {
+  const r = tom.querySelector(".tom-salto").getBoundingClientRect();
+
+  return {
+    left:r.left+r.width*.35,
+    right:r.left+r.width*.75,
+    top:r.top+r.height*.48,
+    bottom:r.top+r.height*.93
+  };
+}
+
+function rectColisionValla(elemento) {
+  const r = elemento.getBoundingClientRect();
+
+  return {
+    left:r.left+r.width*.22,
+    right:r.right-r.width*.20,
+    top:r.top+r.height*.35,
+    bottom:r.bottom-r.height*.08
+  };
+}
+
+function seTocan(a,b) {
+  return a.left<b.right &&
+         a.right>b.left &&
+         a.top<b.bottom &&
+         a.bottom>b.top;
+}
+
+/* DERROTA */
+function perder() {
+  estado = "derrota";
+  pararPistas();
+
+  const porcentaje = Math.min(
+    100,
+    Math.floor(tiempoNivel/DURACION_NIVEL*100)
+  );
+
+  progresoDerrota.textContent = "Recorrido: "+porcentaje+"%";
+  escenario.classList.add("pausado");
+  location.hash = "#derrota";
+}
+
+/* CINEMATICA FINAL - TOM Y GHOST ENTRAN AL GRANERO */
+function ganar() {
+  tiempoNivel = DURACION_NIVEL;
+  actualizarBarra();
+  estado = "final";
+  tiempoFinal = 0;
+  sincronizarMusica();
+  saltando = false;
+  ghostSaltando = false;
+  escenario.classList.remove("saltando", "ghost-saltando", "mostrar-tutorial");
+  // Los obstáculos no deben tapar la entrada al granero.
+  capaObstaculos.replaceChildren();
+  vallas = [];
+  // Alinear ambos personajes con el centro real de la puerta del PNG.
+  // La puerta está aproximadamente al 38% del ancho de graneropuerta.png.
+  const granero = escenario.querySelector(".granero-final");
+  const anchoPantalla = escenario.clientWidth;
+  const centroPuerta = -anchoPantalla * .15 + granero.offsetWidth * .38;
+  const centroTom = tom.offsetLeft + tom.offsetWidth / 2;
+  const centroGhost = ghost.offsetLeft + ghost.offsetWidth / 2;
+  escenario.style.setProperty("--avance-tom", (centroPuerta - centroTom) + "px");
+  escenario.style.setProperty("--avance-ghost", (centroPuerta - centroGhost) + "px");
+  // El CSS congela el suelo y mueve el granero desde el primer instante.
+  escenario.classList.add("final-cinematica");
+}
+
+function comenzarEscenasFinales() {
+  estado = "finalEscenas";
+  tiempoEscenasFinal = 0;
+  escenaFinalActual = -1;
+  cinematicaFinal.classList.add("visible");
+  cinematicaFinal.setAttribute("aria-hidden", "false");
+  cambiarEscenaFinal(0);
+}
+
+function cambiarEscenaFinal(indice) {
+  if (indice >= CANTIDAD_ESCENAS_FINAL) {
+    terminarFinal();
+    return;
+  }
+  escenaFinalActual = indice;
+  escenasFinales.forEach((escena, i) => {
+    escena.classList.toggle("activa", i === indice);
+  });
+  // La música de E1 continúa sin reiniciarse hasta terminar E4.
+  if (indice === 0 || indice === 4 || indice === 5) sincronizarMusica();
+}
+
+function terminarFinal() {
+  cinematicaFinal.classList.remove("visible");
+  cinematicaFinal.setAttribute("aria-hidden", "true");
+  escenasFinales.forEach(e => e.classList.remove("activa"));
+  estado = "victoria";
+  pararPistas();
+  escenario.classList.add("pausado");
+  location.hash = "#victoria";
+}
+
+/* ACTUALIZAR OBSTACULOS */
+function actualizarVallas(dt) {
+  const velocidad = VELOCIDAD_VALLAS *
+    Math.min(1.35,Math.max(.8,escenario.clientWidth/850));
+
+  const paso = velocidad*dt/1000;
+  const rectTom = rectColisionTom();
+  const rectGhost = ghost.getBoundingClientRect();
+
+  for (let i=vallas.length-1;i>=0;i--) {
+    const v = vallas[i];
+
+    v.x -= paso;
+    v.elemento.style.left = v.x+"px";
+
+    const r = rectColisionValla(v.elemento);
+
+    if (
+      !v.ghostPaso &&
+      r.left < rectGhost.right+42 &&
+      r.right > rectGhost.left
+    ) {
+      v.ghostPaso = true;
+      saltarGhost();
+    }
+
+    if (seTocan(rectTom,r) && !saltando) {
+      perder();
+      return;
+    }
+
+    if (r.right < -20) {
+      v.elemento.remove();
+      vallas.splice(i,1);
+    }
+  }
+}
+
+/* BUCLE PRINCIPAL */
+function bucle(ahora) {
+  animacion = null;
+
+  const dt = Math.min(
+    50,
+    Math.max(0,ahora-ultimoFrame)
+  );
+
+  ultimoFrame = ahora;
+
+  if (
+    pausado ||
+    estado==="derrota" ||
+    estado==="victoria" ||
+    estado==="inicio"
+  ) return;
+
+  if (estado==="cinematica") {
+    tiempoCinematica += dt;
+    // El audio de la cinemática ya comenzó al entrar al nivel 1.
+
+    if (tiempoCinematica >= DURACION_CINEMATICA) {
+      empezarCarrera();
+    }
+
+  } else if (estado==="final") {
+    // IMPORTANTE: el bucle sigue durante los 8 segundos de la cinemática.
+    tiempoFinal += dt;
+    if (tiempoFinal >= DURACION_FINAL) {
+      comenzarEscenasFinales();
+    }
+
+  } else if (estado === "finalEscenas") {
+    tiempoEscenasFinal += dt;
+    const indice = Math.floor(tiempoEscenasFinal / DURACION_ESCENA_FINAL);
+    if (indice !== escenaFinalActual) {
+      cambiarEscenaFinal(indice);
+      if (estado === "victoria") return;
+    }
+
+  } else if (estado==="jugando") {
+    tiempoNivel += dt;
+
+    actualizarTutorial();
+    actualizarTormenta(dt);
+
+    /* SALTO TOM */
+    if (saltando) {
+      tiempoSalto += dt;
+
+      if (tiempoSalto >= DURACION_SALTO) {
+        saltando = false;
+        escenario.classList.remove("saltando");
+      }
+    }
+
+    /* SALTO GHOST */
+    if (ghostSaltando) {
+      tiempoGhost += dt;
+
+      actualizarImagenGhost();
+
+      if (tiempoGhost >= DURACION_SALTO_GHOST) {
+        terminarSaltoGhost();
+      }
+    }
+
+    while (
+      siguienteValla < TIEMPOS_VALLAS.length &&
+      tiempoNivel >= TIEMPOS_VALLAS[siguienteValla]*1000
+    ) {
+      crearValla();
+      siguienteValla++;
+    }
+
+    actualizarVallas(dt);
+
+    if (estado !== "jugando") return;
+
+    actualizarBarra();
+
+    if (tiempoNivel >= DURACION_NIVEL) {
+      ganar();
+      animacion = requestAnimationFrame(bucle);
+      return;
+    }
+  }
+
+  animacion = requestAnimationFrame(bucle);
+}
+
+/* PAUSA */
+function pausarJuego() {
+  if (!["jugando", "cinematica", "final", "finalEscenas"].includes(estado)) return;
+
+  pausado = true;
+  pistas.forEach(p => p.pause());
+  escenario.classList.add("pausado");
+
+  if (animacion!==null) {
+    cancelAnimationFrame(animacion);
+    animacion = null;
+  }
+}
+
+function continuarJuego() {
+  if (!pausado) return;
+
+  pausado = false;
+  escenario.classList.remove("pausado");
+  sincronizarMusica();
+  ultimoFrame = performance.now();
+
+  if (animacion===null) {
+    animacion = requestAnimationFrame(bucle);
+  }
+}
+
+/* NAVEGACION */
+function navegar() {
+  const hash = location.hash;
+
+  if (hash==="#jugar") {
+    if (ultimoHash==="#pausa" && pausado) {
+      continuarJuego();
+    } else {
+      iniciarNivel();
+    }
+  } else if (hash==="#pausa") {
+    pausarJuego();
+  } else if (hash!=="#derrota" && hash!=="#victoria") {
+    limpiarNivel();
+    estado = hash === "#niveles" ? "niveles" : hash === "#ayuda" ? "ayuda" : "inicio";
+    sincronizarMusica();
+  }
+
+  ultimoHash = hash;
+}
+
+window.addEventListener("hashchange",navegar);
+
+/* CONTROLES PC */
+document.addEventListener("keydown",function(e) {
+  if (e.code==="Space" && location.hash==="#jugar") {
+    e.preventDefault();
+
+    if (!e.repeat) {
+      habilitarAudio();
+      saltar();
+    }
+  }
+});
+
+/* CONTROLES CELULAR */
+escenario.addEventListener("pointerdown",function(e) {
+  if (e.target.closest(".boton-pausa")) return;
+
+  if (e.pointerType==="touch" || e.pointerType==="pen") {
+    habilitarAudio();
+    saltar();
+  }
+});
+
+/* ACTIVAR AUDIO */
+document.querySelectorAll(".play,.seleccionar-nivel1").forEach(boton=>{
+  boton.addEventListener("pointerdown",desbloquearSonido);
+  boton.addEventListener("click",desbloquearSonido);
+});
+
+/* Al tocar NIVEL 1: cortar música del menú y arrancar la cinemática. */
+document.querySelectorAll(".seleccionar-nivel1").forEach(boton => {
+  boton.addEventListener("click", () => {
+    if (!sonidoActivado) return;
+    sonidoDesbloqueado = true;
+    audioInicio.pause();
+    audioCorrer.pause();
+    reproducirPista(audioSusto, true);
+  });
+});
+
+/* PAUSA AL CAMBIAR PESTAÑA */
+document.addEventListener("visibilitychange",()=>{
+  if (
+    document.hidden &&
+    location.hash==="#jugar" &&
+    (estado==="jugando" || estado==="cinematica" || estado==="final" || estado==="finalEscenas")
+  ) {
+    location.hash="#pausa";
+  }
+});
+
+/* INICIO */
+if (location.hash==="#jugar") {
+  iniciarNivel();
+} else {
+  estado="inicio";
+  actualizarBarra();
+}
+</script>
+
+</body>
+</html>
