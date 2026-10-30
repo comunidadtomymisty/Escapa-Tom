@@ -1449,3 +1449,557 @@ body:has(#jugar:target) .boton-sonido-inicio { z-index: 1000; }
   width: 30%;
   height: 14%;
 }
+
+
+/* ===== AJUSTES FINALES: CARGA, TORMENTA, DERROTA Y VICTORIA ===== */
+/* El giro está en el HTML: -360 grados y object-fit: contain. */
+
+/* Transición de calabaza sin parpadeos: ambas imágenes están precargadas. */
+.capa-obstaculos .valla { position: absolute; }
+.capa-obstaculos .valla::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: url("level1/calabezalluvia.png") center / contain no-repeat;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
+.capa-obstaculos .valla img {
+  visibility: visible !important;
+  opacity: 1;
+  transition: opacity .35s ease;
+}
+.escenario.tormenta-halloween .valla { background-image: none; }
+.escenario.tormenta-halloween .valla::before { opacity: 1; }
+.escenario.tormenta-halloween .valla img { opacity: 0; }
+
+/* Relámpago de entrada: más visible que los truenos periódicos. */
+.escenario.relampago-especial .relampago-halloween {
+  visibility: visible;
+  animation: relampagoEntrada .85s ease-out both;
+}
+@keyframes relampagoEntrada {
+  0% { opacity: 0; }
+  8% { opacity: .9; }
+  16% { opacity: .08; }
+  29% { opacity: .75; }
+  42% { opacity: .1; }
+  55% { opacity: .55; }
+  100% { opacity: 0; }
+}
+
+/* Dejar el escenario congelado visible detrás del PNG de Game Over. */
+body:has(#derrota:target) #jugar {
+  display: block;
+  z-index: 20;
+}
+#derrota {
+  z-index: 45;
+  background: rgba(5, 4, 12, .72);
+  padding: clamp(8px, 2vh, 18px);
+  backdrop-filter: brightness(.75);
+  -webkit-backdrop-filter: brightness(.75);
+}
+#derrota:target { display: flex; }
+#derrota .gameover-contenido {
+  position: relative;
+  width: min(94vw, 520px);
+  max-height: 94dvh;
+  gap: clamp(4px, 1.5vh, 12px);
+  margin: auto;
+}
+#derrota .imagen-gameover {
+  width: 100%;
+  height: auto;
+  max-height: 51dvh;
+  object-fit: contain;
+}
+#derrota .contenedor-botones-gameover {
+  width: min(100%, 440px);
+}
+#derrota .imagen-botones-gameover {
+  width: 100%;
+  height: auto;
+  max-height: 27dvh;
+  object-fit: contain;
+}
+
+/* Efectos decorativos de victoria: no interfieren con el WhatsApp. */
+#victoria .efectos-victoria {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0;
+  background-image:
+    radial-gradient(circle, #ffc74d 0 3px, transparent 5px),
+    radial-gradient(circle, #a763ff 0 3px, transparent 6px),
+    radial-gradient(circle, #ff8c28 0 2px, transparent 5px),
+    radial-gradient(circle, #e9b8ff 0 3px, transparent 6px);
+  background-size: 110px 130px, 160px 145px, 135px 160px, 180px 125px;
+  background-position: 12px -20px, 65px -45px, 100px -90px, 15px -65px;
+}
+#victoria:target .efectos-victoria {
+  animation: lluviaVictoria 2.8s ease-out forwards;
+}
+@keyframes lluviaVictoria {
+  0% { opacity: 0; transform: translateY(-16%); }
+  12% { opacity: .95; }
+  72% { opacity: .85; }
+  100% { opacity: 0; transform: translateY(30%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  #victoria:target .efectos-victoria { animation: none; }
+}
+
+/* BIBLIOTECA DE CINEMÁTICAS */
+/* ==========================================
+   BIBLIOTECA VIVA - ESCAPA TOM
+   La imagen es el fondo, las animaciones son capas HTML/CSS.
+   ========================================== */
+.boton-biblioteca{position:absolute;right:5%;bottom:5%;width:65px;height:65px;z-index:3;display:block;animation:flotarLibro 3.3s ease-in-out infinite;transform-origin:center;filter:drop-shadow(0 0 8px #ad42ff)}
+.boton-biblioteca img{width:100%;height:100%;object-fit:contain;display:block}
+.boton-biblioteca:active{transform:scale(.91)}
+@keyframes flotarLibro{0%,100%{transform:translateY(0) rotate(-3deg);filter:drop-shadow(0 0 6px #8b2acc)}50%{transform:translateY(-8px) rotate(3deg);filter:drop-shadow(0 0 17px #e07aff) drop-shadow(0 0 8px #9a2cfa)}}
+.biblioteca-pantalla{background:#090511;z-index:25}
+.biblioteca-lienzo{position:relative;height:100dvh;width:min(100vw,66.6667dvh);margin:auto;overflow:hidden;isolation:isolate}
+.biblioteca-fondo{display:block;width:100%;height:100%;object-fit:fill;pointer-events:none}
+.biblioteca-lienzo::before{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:radial-gradient(ellipse at 50% 65%,transparent 43%,rgba(5,0,16,.16) 100%);animation:respirarAmbiente 6s ease-in-out infinite}
+@keyframes respirarAmbiente{0%,100%{opacity:.38}50%{opacity:.85}}
+/* Halo en el marco de nivel 1 (posicionado sobre la tarjeta ilustrada) */
+.biblioteca-marco-activo{position:absolute;left:7%;top:36.7%;width:86%;height:15.6%;border:2px solid rgba(255,171,48,.34);border-radius:10px;box-shadow:inset 0 0 13px rgba(255,111,0,.23),0 0 12px rgba(255,104,0,.25);z-index:2;pointer-events:none;animation:latidoMarco 3.2s ease-in-out infinite}
+@keyframes latidoMarco{0%,100%{opacity:.35;box-shadow:inset 0 0 8px #ff7c0033,0 0 6px #ff7c0044}50%{opacity:.88;box-shadow:inset 0 0 16px #ffb13b55,0 0 20px #ff8b0066}}
+.biblioteca-abrir-nivel{position:absolute;left:7%;top:36.7%;width:86%;height:15.6%;z-index:5;cursor:pointer;animation:entradaTarjeta .75s ease-out both}
+.biblioteca-abrir-nivel:active~.biblioteca-marco-activo{filter:brightness(1.5)}
+.biblioteca-pulso-play{position:absolute;left:81.3%;top:27%;width:16%;aspect-ratio:1;border-radius:50%;box-shadow:0 0 12px 5px rgba(35,244,71,.2);animation:brilloPlay 2.1s ease-in-out infinite;pointer-events:none}
+@keyframes brilloPlay{0%,100%{transform:scale(.88);opacity:.22}50%{transform:scale(1.16);opacity:.75}}
+.biblioteca-bloqueo{position:absolute;left:7%;width:86%;height:15.2%;pointer-events:none;z-index:2;animation:entradaTarjeta .8s ease-out both}
+.biblioteca-bloqueo-2{top:53.2%;animation-delay:.14s}
+.biblioteca-bloqueo-3{top:69.8%;animation-delay:.28s}
+@keyframes entradaTarjeta{from{opacity:0;transform:translateY(17px)}to{opacity:1;transform:translateY(0)}}
+.biblioteca-volver{position:absolute;left:29%;top:86.9%;width:42%;height:7%;z-index:5;cursor:pointer}
+.biblioteca-volver:active{filter:brightness(1.4)}
+.biblioteca-luz{position:absolute;bottom:0;width:24%;height:17%;z-index:2;pointer-events:none;mix-blend-mode:screen;filter:blur(16px);background:radial-gradient(ellipse at bottom,#ff9b2d66,transparent 70%);animation:parpadeoVelas 3.7s ease-in-out infinite}
+.biblioteca-luz-izq{left:0}.biblioteca-luz-der{right:0;animation-delay:-1.7s}
+@keyframes parpadeoVelas{0%,100%{opacity:.4;transform:scale(1)}20%{opacity:.8}35%{opacity:.47}60%{opacity:.95;transform:scale(1.1)}75%{opacity:.55}}
+.biblioteca-ambiente{position:absolute;inset:0;pointer-events:none;overflow:hidden;z-index:3}
+.biblioteca-ambiente i{position:absolute;bottom:-4%;width:3px;height:3px;border-radius:50%;background:#ffb548;box-shadow:0 0 9px 2px #ff8100;opacity:0;animation:subirChispa 7s linear infinite}
+.biblioteca-ambiente i:nth-child(1){left:7%;animation-delay:-1s}.biblioteca-ambiente i:nth-child(2){left:16%;animation-delay:-4s}.biblioteca-ambiente i:nth-child(3){left:25%;animation-delay:-6s}.biblioteca-ambiente i:nth-child(4){left:36%;animation-delay:-2s}.biblioteca-ambiente i:nth-child(5){left:46%;animation-delay:-5s}.biblioteca-ambiente i:nth-child(6){left:56%;animation-delay:-3s}.biblioteca-ambiente i:nth-child(7){left:65%;animation-delay:-6.5s}.biblioteca-ambiente i:nth-child(8){left:75%;animation-delay:-1.8s}.biblioteca-ambiente i:nth-child(9){left:85%;animation-delay:-4.8s}.biblioteca-ambiente i:nth-child(10){left:93%;animation-delay:-3.7s}.biblioteca-ambiente i:nth-child(11){left:13%;animation-delay:-5.7s}.biblioteca-ambiente i:nth-child(12){left:82%;animation-delay:-2.8s}
+@keyframes subirChispa{0%{transform:translate3d(0,0,0);opacity:0}12%{opacity:.8}75%{opacity:.65}100%{transform:translate3d(18px,-62dvh,0);opacity:0}}
+/* ARCHIVO DEL NIVEL 1: elementos reales, no texto incrustado en imagen */
+.archivo-pantalla{background:#0c0611;z-index:26;overflow:auto}
+.archivo-lienzo{position:relative;isolation:isolate;width:min(100%,520px);min-height:100dvh;margin:auto;padding:clamp(24px,5dvh,48px) 6% 26px;background:linear-gradient(#100a1bc7,#1c0a13d9),url('inicio/bibliotecainicio.png') center/100% 100% no-repeat;display:flex;flex-direction:column;justify-content:center;gap:clamp(15px,3dvh,28px)}
+.archivo-decoracion{position:absolute;inset:0;pointer-events:none;z-index:-1;background:radial-gradient(circle at 50% 42%,#f771171c,transparent 53%)}
+.archivo-encabezado{text-align:center;text-shadow:0 3px 5px #000}
+.archivo-sobretitulo{display:block;color:#ffce8b;font-size:clamp(9px,2.5vw,12px);letter-spacing:1.5px;font-weight:800}
+.archivo-encabezado h1{font-family:'Creepster',Georgia,serif;font-size:clamp(33px,9vw,54px);font-weight:normal;color:#ff9d36;letter-spacing:1.2px;margin:8px 0;text-shadow:0 3px 0 #4b1700,0 0 15px #ed5c18a1}
+.archivo-encabezado p{font-size:clamp(12px,3vw,15px);color:#f3d9bd}
+.archivo-tarjeta{position:relative;border:2px solid #f28c2d;border-radius:15px;background:linear-gradient(120deg,#32110de8,#180b12ee);padding:14px;display:grid;grid-template-columns:29% 1fr;gap:12px;box-shadow:0 0 18px #ed6c265c,inset 0 0 16px #d35c0b25;animation:entradaTarjeta .7s ease-out both,brilloTarjetaArchivo 4s ease-in-out infinite}
+@keyframes brilloTarjetaArchivo{0%,100%{box-shadow:0 0 9px #ed6c2644,inset 0 0 9px #d35c0b25}50%{box-shadow:0 0 24px #ff7d2877,inset 0 0 17px #d35c0b55}}
+.archivo-miniatura{aspect-ratio:3/4;grid-row:span 2;overflow:hidden;border-radius:9px;border:1px solid #b55c28}
+.archivo-miniatura img{width:100%;height:100%;object-fit:cover}
+.archivo-detalles h2{font-family:'Creepster',Georgia,serif;color:#ffbf67;font-size:clamp(20px,5vw,29px);font-weight:normal}
+.archivo-detalles p{color:#f3d5c0;font-size:clamp(11px,2.8vw,14px);line-height:1.4;margin:7px 0}
+.archivo-estado{font-size:clamp(9px,2.5vw,12px);color:#aaffae;font-weight:800}
+.biblioteca-reproducir{align-self:end;justify-self:start;display:flex;align-items:center;gap:8px;padding:7px 12px;background:linear-gradient(#217d39,#0a381c);border:1px solid #62ec75;border-radius:30px;color:white;text-decoration:none;font-weight:900;box-shadow:0 0 13px #41ff5377;animation:latidoReproducir 2.2s ease-in-out infinite}
+.biblioteca-reproducir span{font-size:20px;color:#ffe6a6}.biblioteca-reproducir small{font-size:10px}
+@keyframes latidoReproducir{0%,100%{transform:scale(1);box-shadow:0 0 8px #41ff5355}50%{transform:scale(1.055);box-shadow:0 0 18px #41ff53aa}}
+.archivo-progreso{grid-column:1/-1;margin-top:2px}
+.archivo-progreso-texto{display:flex;justify-content:space-between;align-items:center;font-size:clamp(10px,2.7vw,13px);font-weight:800;color:#ffdbad;margin-bottom:8px}
+.archivo-progreso-texto strong{color:#fff0b8}
+.archivo-segmentos{display:flex;gap:5px}
+.archivo-segmentos span{height:10px;flex:1;border-radius:30px;background:#2b1a2d;border:1px solid #654456;box-shadow:inset 0 1px 3px #000}
+.archivo-segmentos span.desbloqueado{background:linear-gradient(#fff1a6,#ff9b0a 55%,#bc4300);border-color:#ffd780;box-shadow:0 0 8px #ff8c28;animation:brilloSegmentos 3s ease-in-out infinite}
+.archivo-segmentos span:nth-child(2){animation-delay:.18s}.archivo-segmentos span:nth-child(3){animation-delay:.36s}.archivo-segmentos span:nth-child(4){animation-delay:.54s}.archivo-segmentos span:nth-child(5){animation-delay:.72s}.archivo-segmentos span:nth-child(6){animation-delay:.9s}
+@keyframes brilloSegmentos{0%,100%{filter:brightness(.9)}50%{filter:brightness(1.28)}}
+.archivo-proximos{display:flex;flex-direction:column;gap:12px}
+.archivo-proximo{display:flex;align-items:center;gap:13px;padding:13px 15px;border:1px solid #695178;border-radius:12px;background:linear-gradient(110deg,#24172de8,#120b1ae8);box-shadow:inset 0 0 10px #5c357e44;animation:entradaTarjeta .7s ease-out both}
+.archivo-proximo:nth-child(2){animation-delay:.16s}
+.archivo-proximo>span:first-child{font-size:32px}.archivo-proximo>div{flex:1}.archivo-proximo strong{display:block;color:#d6b5e5;font-family:Georgia,serif;font-size:clamp(14px,3.8vw,19px)}.archivo-proximo small{display:block;color:#bba5c9;margin-top:5px}
+.archivo-candado{font-size:24px;filter:drop-shadow(0 0 5px #c187f2);animation:destelloCandado 5s ease-in-out infinite}
+@keyframes destelloCandado{0%,80%,100%{opacity:.6}90%{opacity:1;filter:drop-shadow(0 0 10px #d39cff)}}
+.archivo-volver{display:block;align-self:center;text-align:center;padding:13px 24px;border-radius:10px;border:2px solid #ce712e;background:linear-gradient(#76330e,#371709);box-shadow:0 0 10px #ff6b2a55;color:#ffd1a0;text-decoration:none;font-family:'Creepster',Georgia,serif;font-size:clamp(21px,5vw,28px);letter-spacing:1px}
+/* REPRODUCTOR: la cinemática permanece igual */
+.reproductor-biblioteca{background:#07040e;z-index:35}
+.reproductor-biblioteca:target{display:flex;flex-direction:column}
+.reproductor-superior{position:absolute;z-index:5;top:max(10px,env(safe-area-inset-top));left:0;right:0;display:flex;align-items:center;gap:10px;padding:8px 12px}
+.reproductor-salir{width:54px;height:54px;flex:none}.reproductor-salir img{width:100%;height:100%;object-fit:contain}
+.reproductor-barra{flex:1;height:3px;background:#5a485c99;border-radius:99px;overflow:hidden}.reproductor-barra>div{height:100%;width:0;background:#ffa63f;box-shadow:0 0 8px #ff9a2d}
+.reproductor-escena{width:100%;height:100%;position:relative;display:flex;align-items:center;justify-content:center}.reproductor-escena>img{width:100%;height:100%;object-fit:contain}
+.reproductor-textos{position:absolute;bottom:max(6%,env(safe-area-inset-bottom));left:5%;width:90%;text-align:center;background:linear-gradient(transparent,#08040cd9 20%,#08040ce8);padding:25px 12px 18px;text-shadow:0 2px 5px #000}
+.reproductor-textos h2{font-family:'Creepster',Georgia,serif;color:#ffb052;font-size:clamp(25px,6vw,40px);letter-spacing:1px}.reproductor-textos p{font-size:clamp(14px,3.7vw,20px);line-height:1.35;margin-top:7px}
+@media(max-width:430px){.boton-biblioteca{width:60px;height:60px}}
+@media(prefers-reduced-motion:reduce){.boton-biblioteca,.biblioteca-lienzo::before,.biblioteca-marco-activo,.biblioteca-abrir-nivel,.biblioteca-bloqueo,.biblioteca-pulso-play,.biblioteca-luz,.biblioteca-ambiente i,.archivo-tarjeta,.biblioteca-reproducir,.archivo-segmentos span,.archivo-proximo,.archivo-candado{animation:none!important}}
+
+/* =====================================================
+   ESCAPA TOM - ACTUALIZACIÓN BIBLIOTECA + DERROTA
+   Compatible con el index.html actualizado.
+   ===================================================== */
+
+/* Biblioteca: panel ilustrado como una pequeña pantalla PNG. */
+.archivo-pantalla .archivo-lienzo {
+  justify-content: center;
+  gap: clamp(9px, 1.7dvh, 17px);
+  padding-top: max(12px, env(safe-area-inset-top));
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+.archivo-pantalla .archivo-encabezado { display: none; }
+.archivo-tarjeta.archivo-tarjeta-png {
+  display: block;
+  position: relative;
+  width: min(92%, 375px, 55dvh);
+  aspect-ratio: 1230 / 1278;
+  height: auto;
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
+  overflow: visible;
+  animation: aparecerPanelTom .7s ease-out both, flotarPanelTom 5s ease-in-out .7s infinite;
+}
+.archivo-tarjeta-png .archivo-panel-png {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+  pointer-events: none;
+  filter: drop-shadow(0 0 14px rgba(255,104,12,.35));
+}
+/* El dibujo PNG ya contiene título, miniatura, textos y botones. */
+.archivo-tarjeta-png .archivo-miniatura,
+.archivo-tarjeta-png .archivo-detalles { display: none; }
+/* Área táctil invisible sobre el botón REPRODUCIR del PNG. */
+.archivo-tarjeta-png .biblioteca-reproducir {
+  position: absolute;
+  left: 23%;
+  top: 68.1%;
+  width: 54%;
+  height: 11%;
+  z-index: 5;
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  box-shadow: none;
+  animation: none;
+  display: block;
+  font-size: 0;
+}
+.archivo-tarjeta-png .biblioteca-reproducir span,
+.archivo-tarjeta-png .biblioteca-reproducir small { display: none; }
+.archivo-tarjeta-png .biblioteca-reproducir::after {
+  content: "";
+  position: absolute;
+  inset: 8% 4%;
+  border-radius: 16px;
+  box-shadow: 0 0 13px rgba(255,130,14,.28);
+  animation: resplandorBotonPNG 2.5s ease-in-out infinite;
+}
+.archivo-tarjeta-png .biblioteca-reproducir:active { transform: scale(.97); }
+/* Sustituye visualmente los 6 huecos impresos por 11 indicadores reales. */
+.archivo-tarjeta-png .archivo-progreso {
+  position: absolute;
+  left: 18%;
+  top: 60.4%;
+  width: 68%;
+  height: 6.5%;
+  margin: 0;
+  z-index: 4;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 1.5% 1.5%;
+  border-radius: 8px;
+  background: #180c0d;
+  box-shadow: 0 0 0 2px rgba(255,166,65,.32), inset 0 0 8px #000;
+}
+.archivo-tarjeta-png .archivo-progreso-texto {
+  position: absolute;
+  right: -17%;
+  top: 0;
+  width: 17%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+  background: #1c0d0b;
+  border-radius: 5px;
+}
+.archivo-tarjeta-png .archivo-progreso-texto > span { display: none; }
+.archivo-tarjeta-png .archivo-progreso-texto strong {
+  font-family: Georgia, serif;
+  font-size: clamp(11px, 3.1vw, 19px);
+  color: #ffe9aa;
+  text-shadow: 0 2px 3px #000;
+  white-space: nowrap;
+}
+.archivo-tarjeta-png .archivo-segmentos {
+  display: flex;
+  width: 100%;
+  gap: 2px;
+  align-items: center;
+}
+.archivo-tarjeta-png .archivo-segmentos span {
+  flex: 1;
+  min-width: 0;
+  height: clamp(5px, 1.1vw, 9px);
+  border-radius: 5px;
+}
+.archivo-tarjeta-png .archivo-segmentos span.desbloqueado {
+  background: linear-gradient(#fff6c4, #ffb523 55%, #a84500);
+  box-shadow: 0 0 5px #ff922e;
+}
+/* Botón volver: el PNG ya lo incluye. */
+.archivo-pantalla .archivo-volver {
+  position: absolute;
+  z-index: 7;
+  left: 23%;
+  top: 80.9%;
+  width: 54%;
+  height: 10%;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  font-size: 0;
+}
+/* El botón volver pertenece al PNG: se superpone dentro de la tarjeta. */
+.archivo-tarjeta-png + .archivo-proximos { display: none; }
+.archivo-pantalla .archivo-lienzo { position: relative; }
+/* Ubicación independiente del botón volver según la pantalla del archivo. */
+.archivo-pantalla .archivo-volver {
+  top: auto;
+  bottom: max(9px, 3dvh);
+  left: 50%;
+  transform: translateX(-50%);
+  width: min(72vw, 260px);
+  height: 45px;
+  border-radius: 14px;
+  background: linear-gradient(160deg, #57237e, #2a103e);
+  border: 2px solid #ba64ff;
+  box-shadow: 0 0 12px #ad4cff88;
+  font-size: clamp(16px, 4vw, 21px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+}
+@keyframes aparecerPanelTom { from {opacity:0;transform:translateY(15px) scale(.96)} to {opacity:1;transform:translateY(0) scale(1)} }
+@keyframes flotarPanelTom { 0%,100% {transform:translateY(0)} 50% {transform:translateY(-5px)} }
+@keyframes resplandorBotonPNG { 0%,100% {opacity:.25} 50% {opacity:.8} }
+
+/* Cinemática de derrota: cuatro imágenes, una por segundo. */
+.cinematica-derrota {
+  position: absolute;
+  inset: 0;
+  z-index: 500;
+  display: none;
+  overflow: hidden;
+  background: rgba(7, 3, 12, .79);
+  backdrop-filter: blur(3px);
+  -webkit-backdrop-filter: blur(3px);
+  pointer-events: none;
+}
+.cinematica-derrota.visible { display: block; }
+.cinematica-derrota::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 47%, rgba(255,105,12,.2), transparent 64%);
+  animation: ambienteDerrota 1s ease-in-out infinite alternate;
+}
+.derrota-escena {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  padding: 8dvh 6vw 10dvh;
+}
+.derrota-escena.activa { display: flex; }
+.derrota-escena img {
+  display: block;
+  width: min(86vw, 440px);
+  height: min(64dvh, 550px);
+  object-fit: contain;
+  filter: drop-shadow(0 8px 18px rgba(0,0,0,.75));
+  animation: entradaDerrotaTom .24s ease-out both, vibrarDerrotaTom .17s linear .24s 2;
+}
+.derrota-escena strong {
+  z-index: 3;
+  display: block;
+  max-width: 94vw;
+  margin-top: 1dvh;
+  font-family: 'Creepster', Georgia, serif;
+  font-size: clamp(29px, 8vw, 55px);
+  font-weight: normal;
+  line-height: 1.1;
+  text-align: center;
+  letter-spacing: 1px;
+  color: #ffb72f;
+  -webkit-text-stroke: .5px #4e1004;
+  text-shadow: 0 3px 0 #621500, 0 0 16px #ff6a00, 2px 5px 4px #000;
+  animation: aparecerGritoDerrota .3s ease-out both;
+}
+.derrota-escena-3 strong,
+.derrota-escena-4 strong { color: #e8a3ff; text-shadow: 0 3px 0 #4e1267, 0 0 17px #a51aff, 2px 5px 4px #000; }
+.derrota-escena-4 img { animation: entradaRisaGhost .45s ease-out both, risaGhost .22s ease-in-out .45s infinite alternate; }
+.derrota-escena-1::after,
+.derrota-escena-2::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+  background: radial-gradient(circle at 22% 58%, #ffad2cbb 0 2px, transparent 5px), radial-gradient(circle at 74% 36%, #ff8512bb 0 3px, transparent 6px), radial-gradient(circle at 51% 70%, #ffca59bb 0 3px, transparent 6px);
+  background-size: 100px 130px, 130px 170px, 160px 120px;
+  animation: salpicaduraCalabaza .9s ease-out both;
+}
+@keyframes entradaDerrotaTom { from {opacity:0;transform:scale(.72) rotate(-7deg)} to {opacity:1;transform:scale(1) rotate(0)} }
+@keyframes vibrarDerrotaTom { from {transform:translateX(-3px)} to {transform:translateX(3px)} }
+@keyframes entradaRisaGhost { from {opacity:0;transform:translateY(20px) scale(.8)} to {opacity:1;transform:translateY(0) scale(1)} }
+@keyframes risaGhost { from {transform:rotate(-2deg) scale(1)} to {transform:rotate(2deg) scale(1.035)} }
+@keyframes aparecerGritoDerrota { from {opacity:0;transform:translateY(15px) scale(.8)} to {opacity:1;transform:translateY(0) scale(1)} }
+@keyframes salpicaduraCalabaza { from {opacity:0;transform:scale(.65)} 25% {opacity:.9} to {opacity:0;transform:scale(1.35)} }
+@keyframes ambienteDerrota { from {opacity:.5} to {opacity:1} }
+@media (prefers-reduced-motion: reduce) {
+  .archivo-tarjeta.archivo-tarjeta-png,
+  .archivo-tarjeta-png .biblioteca-reproducir::after,
+  .cinematica-derrota::before,
+  .derrota-escena img,
+  .derrota-escena strong,
+  .derrota-escena::after { animation: none !important; }
+}
+
+/* =======================================================
+   CORRECCIÓN FINAL: DERROTA EN EL ESCENARIO Y PUERTA
+   ======================================================= */
+/* En el choque y en la llegada al granero el suelo se detiene. */
+.escenario.derrota-en-escenario .suelo-movimiento,
+.escenario.final-cinematica .suelo-movimiento { animation-play-state: paused !important; }
+.escenario.derrota-en-escenario .lluvia-halloween,
+.escenario.derrota-en-escenario .relampago-halloween { animation-play-state: paused !important; }
+.escenario.derrota-en-escenario .boton-pausa { pointer-events: none; opacity: .45; }
+/* Mantener el mundo visible; esconder solamente los frames de carrera. */
+.escenario.derrota-en-escenario .tom-jugador,
+.escenario.derrota-en-escenario .ghost-corriendo { opacity: 1 !important; animation: none !important; }
+.escenario.derrota-en-escenario .tom-corriendo,
+.escenario.derrota-en-escenario .tom-saltando,
+.escenario.derrota-en-escenario .ghost-corriendo > .frame,
+.escenario.derrota-en-escenario .ghost-salto-contenedor { display: none !important; }
+.escenario.derrota-en-escenario .tom-salto { transform: none !important; animation: none !important; }
+.tom-derrota, .ghost-derrota {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  object-fit: contain; display: none; pointer-events: none;
+  filter: drop-shadow(0 5px 5px #0009);
+}
+.escenario.derrota-fase-1 .tom-derrota-choque { display: block; animation: golpeTom .3s ease-out both; }
+.escenario.derrota-fase-2 .tom-derrota-mareado,
+.escenario.derrota-fase-3 .tom-derrota-mareado,
+.escenario.derrota-fase-4 .tom-derrota-mareado { display: block; }
+.escenario.derrota-fase-1 .ghost-derrota-parado,
+.escenario.derrota-fase-2 .ghost-derrota-parado,
+.escenario.derrota-fase-3 .ghost-derrota-parado { display: block; }
+.escenario.derrota-fase-4 .ghost-derrota-risa { display: block; animation: risaGhostEnJuego .23s ease-in-out infinite alternate; }
+@keyframes golpeTom { 0% {transform:translateX(0) rotate(0)} 30% {transform:translateX(-7px) rotate(-9deg)} 70% {transform:translateX(5px) rotate(5deg)} 100% {transform:translateX(0) rotate(0)} }
+@keyframes risaGhostEnJuego { from {transform:rotate(-4deg) translateY(0)} to {transform:rotate(4deg) translateY(-3px)} }
+/* La puerta se fija en su posición al 38% del ancho del granero.
+   Los desplazamientos de Tom y Ghost se calculan en JS en píxeles reales. */
+@keyframes tomEntraGranero {
+  0%, 37% { transform: translateX(0) scale(1); opacity: 1; }
+  58% { transform: translateX(var(--avance-tom, 0px)) scale(.65); opacity: 1; }
+  69%, 100% { transform: translateX(var(--avance-tom, 0px)) scale(.22); opacity: 0; }
+}
+@keyframes ghostEntraGranero {
+  0%, 44% { transform: translateX(0) scale(1); opacity: 1; }
+  70% { transform: translateX(var(--avance-ghost, 0px)) scale(.64); opacity: 1; }
+  85%, 100% { transform: translateX(var(--avance-ghost, 0px)) scale(.22); opacity: 0; }
+}
+/* La entrada del granero debe tapar a los personajes cuando cruzan el umbral. */
+.escenario.final-cinematica .granero-final { z-index: 15; }
+.escenario.final-cinematica .tom-jugador { z-index: 14; }
+.escenario.final-cinematica .ghost-corriendo { z-index: 13; }
+
+
+/* AJUSTES FINALES: regreso desde victoria y entrada visible al granero */
+#victoria .victoria-volver-inicio {
+  position: absolute;
+  top: max(10px, env(safe-area-inset-top));
+  left: 10px;
+  width: clamp(48px, 15vw, 74px);
+  aspect-ratio: 1;
+  z-index: 80;
+  display: block;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  filter: drop-shadow(0 3px 7px rgba(0,0,0,.7));
+}
+#victoria .victoria-volver-inicio img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+#victoria .victoria-volver-inicio:active { transform: scale(.93); }
+
+/* El granero queda detrás de los personajes mientras cruzan la entrada.
+   Ambos se encogen y se desvanecen JUSTO en el centro de la puerta. */
+.escenario.final-cinematica .granero-final { z-index: 12 !important; }
+.escenario.final-cinematica .ghost-corriendo { z-index: 30 !important; }
+.escenario.final-cinematica .tom-jugador { z-index: 31 !important; }
+.escenario.final-cinematica .tom-jugador,
+.escenario.final-cinematica .ghost-corriendo { transform-origin: center bottom; }
+@keyframes tomEntraGranero {
+  0%, 37% { transform: translateX(0) scale(1); opacity: 1; }
+  57% { transform: translateX(var(--avance-tom, 0px)) scale(.55); opacity: 1; }
+  69%, 100% { transform: translateX(var(--avance-tom, 0px)) scale(.10); opacity: 0; }
+}
+@keyframes ghostEntraGranero {
+  0%, 44% { transform: translateX(0) scale(1); opacity: 1; }
+  71% { transform: translateX(var(--avance-ghost, 0px)) scale(.53); opacity: 1; }
+  85%, 100% { transform: translateX(var(--avance-ghost, 0px)) scale(.10); opacity: 0; }
+}
+
+
+/* ============================================================
+   ENTRADA AL GRANERO - CORRECCION DEFINITIVA
+   Se camina sobre el suelo, SIN escala ni desplazamiento vertical.
+   Al cruzar el umbral se desvanece cada personaje en la puerta.
+   ============================================================ */
+.escenario.final-cinematica .suelo-movimiento {
+  animation-play-state: paused !important;
+}
+.escenario.final-cinematica .granero-final {
+  z-index: 12 !important;
+}
+.escenario.final-cinematica .tom-jugador {
+  z-index: 31 !important;
+  transform-origin: center bottom;
+  animation: tomEntraGranero 8s linear both !important;
+}
+.escenario.final-cinematica .ghost-corriendo {
+  z-index: 30 !important;
+  transform-origin: center bottom;
+  animation: ghostEntraGranero 8s linear both !important;
+}
+/* La posición vertical se conserva por bottom:var(--altura-camino).
+   No usar scale(): provocaba la ilusión de hundirse en la tierra. */
+@keyframes tomEntraGranero {
+  0%, 38% { transform: translateX(0); opacity: 1; }
+  57% { transform: translateX(var(--avance-tom, 0px)); opacity: 1; }
+  66%, 100% { transform: translateX(var(--avance-tom, 0px)); opacity: 0; }
+}
+@keyframes ghostEntraGranero {
+  0%, 44% { transform: translateX(0); opacity: 1; }
+  70% { transform: translateX(var(--avance-ghost, 0px)); opacity: 1; }
+  81%, 100% { transform: translateX(var(--avance-ghost, 0px)); opacity: 0; }
+}

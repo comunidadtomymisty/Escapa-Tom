@@ -7,9 +7,36 @@
 <meta name="theme-color" content="#080611">
 <title>Escapa Tom | Comunidad Tom</title>
 <link rel="icon" href="data:,">
+<style>
+/* Estilos críticos: la pantalla negra se muestra inmediatamente */
+#pantallaCarga{position:fixed;inset:0;width:100%;height:100dvh;background:#000;z-index:2147483647;display:flex;align-items:center;justify-content:center;opacity:1;visibility:visible;transition:opacity .55s ease,visibility .55s ease;overflow:hidden}
+#pantallaCarga.carga-lista{opacity:0;visibility:hidden;pointer-events:none}
+#pantallaCarga .carga-logo{position:absolute;left:clamp(12px,3vw,36px);top:clamp(12px,3vh,30px);width:clamp(110px,25vw,230px);height:auto;object-fit:contain}
+#pantallaCarga .carga-centro{width:min(76vw,380px);max-height:78dvh;display:flex;align-items:center;flex-direction:column;justify-content:center;gap:clamp(8px,2vh,20px)}
+#pantallaCarga .carga-circulo{width:min(54vw,250px,42dvh);height:min(54vw,250px,42dvh);aspect-ratio:1/1;object-fit:fill;display:block;flex-shrink:0;animation:giroCargaTom 2.6s linear infinite;transform-origin:50% 50%;will-change:transform}
+#pantallaCarga .carga-texto{width:min(70vw,350px);max-height:18dvh;height:auto;object-fit:contain}
+@keyframes giroCargaTom{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
+@media(max-height:540px){#pantallaCarga .carga-circulo{width:min(37dvh,185px);height:min(37dvh,185px)}#pantallaCarga .carga-texto{width:min(45vw,250px)}}
+/* Subtítulos cinematográficos con entrada suave, sin modificar el CSS del nivel */
+.reproductor-textos.subtitulos-animados h2 {animation: tituloHistoria .65s ease-out both;}
+.reproductor-textos.subtitulos-animados p {animation: textoHistoria 1s .22s ease-out both;}
+@keyframes tituloHistoria {from {opacity:0;transform:translateY(12px);filter:blur(3px)}to {opacity:1;transform:translateY(0);filter:blur(0)}}
+@keyframes textoHistoria {from {opacity:0;transform:translateY(10px)}to {opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){.reproductor-textos.subtitulos-animados h2,.reproductor-textos.subtitulos-animados p{animation:none}}
+</style>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
+
+<!-- PANTALLA DE CARGA: aparece antes que el juego -->
+<div id="pantallaCarga" class="pantalla-carga" role="status" aria-label="Cargando Escapa Tom">
+  <img class="carga-logo" src="inicio/titulo.png" alt="Escapa Tom" fetchpriority="high">
+  <div class="carga-centro">
+    <img class="carga-circulo" src="inicio/circulocargando.png" alt="Tom escapando de Ghost" fetchpriority="high">
+    <img class="carga-texto" src="inicio/cargando.png" alt="Cargando" fetchpriority="high">
+  </div>
+</div>
+
 
 <!-- INICIO -->
 <main id="inicio" class="pantalla inicio">
@@ -21,7 +48,51 @@
   <a href="#ayuda" class="pregunta">
     <img src="inicio/comojugar.png" alt="Cómo jugar">
   </a>
+  <a href="#biblioteca" class="boton-biblioteca" aria-label="Abrir biblioteca de cinemáticas"><img src="inicio/boton-biblioteca.png" alt="Biblioteca"></a>
 </main>
+
+
+<!-- BIBLIOTECA: PORTADA DE NIVELES Y ARCHIVO DEL NIVEL 1 -->
+<section id="biblioteca" class="pantalla biblioteca-pantalla" aria-label="Biblioteca de cinemáticas">
+  <div class="biblioteca-lienzo">
+    <img class="biblioteca-fondo" src="inicio/bibliotecainicio.png" alt="Biblioteca: Nivel 1 disponible, niveles 2 y 3 próximamente">
+    <div class="biblioteca-ambiente" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+    <span class="biblioteca-luz biblioteca-luz-izq" aria-hidden="true"></span>
+    <span class="biblioteca-luz biblioteca-luz-der" aria-hidden="true"></span>
+    <div class="biblioteca-marco-activo" aria-hidden="true"></div>
+    <a href="#archivoNivel1" class="biblioteca-abrir-nivel" aria-label="Abrir cinemáticas del nivel 1, Dulce o truco"><span class="biblioteca-pulso-play" aria-hidden="true"></span></a>
+    <div class="biblioteca-bloqueo biblioteca-bloqueo-2" aria-label="Nivel 2, próximamente"></div>
+    <div class="biblioteca-bloqueo biblioteca-bloqueo-3" aria-label="Nivel 3, próximamente"></div>
+    <a href="#inicio" class="biblioteca-volver" aria-label="Volver al menú principal"></a>
+  </div>
+</section>
+
+<!-- ARCHIVO DEL NIVEL 1: LA HISTORIA CRECE AL COMPLETAR EL JUEGO -->
+<section id="archivoNivel1" class="pantalla archivo-pantalla" aria-label="Archivo de cinemáticas del nivel 1">
+  <div class="archivo-lienzo">
+    <div class="archivo-decoracion" aria-hidden="true"></div>
+    <header class="archivo-encabezado"><span class="archivo-sobretitulo">ESCAPA TOM · ARCHIVO DE CINEMÁTICAS</span><h1>🎬 DULCE O TRUCO</h1><p>Una historia que crece con tu aventura</p></header>
+    <div class="archivo-tarjeta archivo-tarjeta-png" id="tarjetaDulceTruco">
+      <img class="archivo-panel-png" src="inicio/cinematica.png" alt="" aria-hidden="true">
+      <div class="archivo-miniatura"><img src="historia/historialevel1.png" alt="Tom llega a la granja"></div>
+      <div class="archivo-detalles"><h2>La historia de Tom</h2><p id="bibliotecaDescripcion">Descubrí qué ocurrió antes de la persecución...</p><span class="archivo-estado" id="bibliotecaEstado">PRÓLOGO DISPONIBLE</span></div>
+      <a href="#reproductorBiblioteca" id="abrirDulceTruco" class="biblioteca-reproducir" aria-label="Reproducir Dulce o truco"><span aria-hidden="true">▶</span><small>REPRODUCIR</small></a>
+      <a href="#biblioteca" class="archivo-volver-png" aria-label="Volver a la Biblioteca" style="position:absolute;left:22%;top:81%;width:56%;height:11%;z-index:8;display:block;background:transparent;border:0;text-decoration:none;"></a>
+      <div class="archivo-progreso"><div class="archivo-progreso-texto"><span>CINEMÁTICAS DISPONIBLES</span><strong id="bibliotecaContadorCompleto">4/11</strong></div><div class="archivo-segmentos" id="bibliotecaProgresoExtra" aria-label="Progreso de la historia"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div></div>
+    </div>
+    <div class="archivo-proximos"><div class="archivo-proximo"><span>🎄</span><div><strong>NIVEL 2 · NAVIDAD</strong><small>Próximamente...</small></div><span class="archivo-candado">🔒</span></div><div class="archivo-proximo"><span>🎆</span><div><strong>NIVEL 3 · AÑO NUEVO</strong><small>Próximamente...</small></div><span class="archivo-candado">🔒</span></div></div>
+  </div>
+</section>
+<section id="reproductorBiblioteca" class="pantalla reproductor-biblioteca" aria-label="Reproductor de la historia Dulce o truco">
+  <div class="reproductor-superior">
+    <a href="#archivoNivel1" class="reproductor-salir" aria-label="Salir de la cinemática"><img src="inicio/Volver.png" alt="Salir"></a>
+    <div class="reproductor-barra"><div id="barraCinematicaBiblioteca"></div></div>
+  </div>
+  <div class="reproductor-escena">
+    <img id="imagenCinematicaBiblioteca" src="inicio/fondoinicio.png" alt="Escena de la historia">
+    <div class="reproductor-textos"><h2 id="tituloCinematicaBiblioteca"></h2><p id="textoCinematicaBiblioteca"></p></div>
+  </div>
+</section>
 
 <!-- AYUDA -->
 <section id="ayuda" class="pantalla ayuda">
@@ -87,6 +158,8 @@
       <img src="ghost/GhostRunFrame2.png" class="frame frame2" alt="">
       <img src="ghost/GhostRunFrame3.png" class="frame frame3" alt="">
       <img src="ghost/GhostRunFrame4.png" class="frame frame4" alt="">
+      <img class="ghost-derrota ghost-derrota-parado" src="ghost/ghostover1.png" alt="" draggable="false">
+      <img class="ghost-derrota ghost-derrota-risa" src="ghost/ghostover2.png" alt="" draggable="false">
     </div>
 
     <!-- TOM -->
@@ -107,7 +180,8 @@
           <img src="tom/TomJumpFrame4.png" class="jump-frame jump4" alt="">
           <img src="tom/TomJumpFrame5.png" class="jump-frame jump5" alt="">
         </div>
-
+        <img class="tom-derrota tom-derrota-choque" src="tom/tomover1.png" alt="" draggable="false">
+        <img class="tom-derrota tom-derrota-mareado" src="tom/tomover2.png" alt="" draggable="false">
       </div>
     </div>
 
@@ -194,6 +268,8 @@
 
 <!-- PANTALLA GANADORA -->
 <section id="victoria" class="pantalla pantalla-resultado victoria">
+  <div class="efectos-victoria" aria-hidden="true"></div>
+  <a href="#inicio" class="victoria-volver-inicio" aria-label="Volver al inicio"><img src="inicio/Volver.png" alt="Volver al inicio" draggable="false"></a>
   <div class="pantalla-ganadora-contenedor">
     <img src="level1/pantallaganadora.png" class="imagen-pantalla-ganadora"
          alt="Tom pudo esconderse de Ghost. Muchas felicidades, lograste salvarlo.">
@@ -219,6 +295,47 @@
 <audio id="audioFinalSusto" src="soundfinal/escena5sound.mp4" preload="auto" playsinline></audio>
 <audio id="audioFinalMisty" src="soundfinal/escena6sound.mp4" preload="auto" playsinline></audio>
 
+
+<script>
+/* Precarga real de imágenes. No interfiere con la lógica del juego. */
+(function () {
+  "use strict";
+  const pantalla = document.getElementById("pantallaCarga");
+  const recursos = ["inicio/circulocargando.png", "inicio/boton-biblioteca.png", "inicio/bibliotecainicio.png", "historia/historialevel1.png", "historia/historialevel2.png", "historia/historialevel3.png", "historia/historialevel4.png", "historia/historialevel5.png", "inicio/cinematica.png", "tom/tomover1.png", "tom/tomover2.png", "ghost/ghostover1.png", "ghost/ghostover2.png", "inicio/cargando.png", "finallevel1/escenafinal1.png", "finallevel1/escenafinal2.png", "finallevel1/escenafinal3.png", "finallevel1/escenafinal4.png", "finallevel1/escenafinal5.png", "finallevel1/escenafinal6.png", "ghost/GhostRunFrame1.png", "ghost/GhostRunFrame2.png", "ghost/GhostRunFrame3.png", "ghost/GhostRunFrame4.png", "ghost/arbustoframe1.png", "ghost/arbustoframe2.png", "ghost/arbustoframe3.png", "ghost/ghostsalto1.png", "ghost/ghostsalto2.png", "ghost/ghostsalto3.png", "inicio/Niveles.png", "inicio/Volver.png", "inicio/audio.png", "inicio/comojugar.png", "inicio/fondoinicio.png", "inicio/info.png", "inicio/iniciarjuego.png", "inicio/mute.png", "inicio/titulo.png", "level1/GameOver.png", "level1/GranjaFondo.png", "level1/GranjaFondoLluvia.png", "level1/GranjaSuelo.png", "level1/GranjaSueloLluvia.png", "level1/Obstaculo.png", "level1/Pause.png", "level1/botonesgameover.png", "level1/calabezalluvia.png", "level1/graneropuerta.png", "level1/menupause.png", "level1/pantallaganadora.png", "level1/recorrido.png", "level1/textoCorre.png", "level1/tutorial.png", "tom/TomJumpFrame1.png", "tom/TomJumpFrame2.png", "tom/TomJumpFrame3.png", "tom/TomJumpFrame4.png", "tom/TomJumpFrame5.png", "tom/TomRunFrame1.png", "tom/TomRunFrame2.png", "tom/TomRunFrame3.png", "tom/TomRunFrame4.png", "tom/tomasustado.png", "tom/tomcurioso.png"];
+  const inicio = performance.now();
+  const minimoVisible = 700;
+  const tiempoMaximo = 18000; // Evita que un archivo roto bloquee el juego para siempre.
+  let finalizada = false;
+  function cargarImagen(ruta) {
+    return new Promise(resolve => {
+      const img = new Image();
+      let resuelto = false;
+      function terminar() {
+        if (resuelto) return;
+        resuelto = true;
+        resolve();
+      }
+      img.onload = terminar;
+      img.onerror = terminar; // Una imagen faltante no bloquea el menú.
+      img.src = ruta;
+      if (img.complete) terminar();
+    });
+  }
+  function finalizar() {
+    if (finalizada) return;
+    finalizada = true;
+    const espera = Math.max(0, minimoVisible - (performance.now() - inicio));
+    setTimeout(() => {
+      pantalla.classList.add("carga-lista");
+      setTimeout(() => pantalla.remove(), 650);
+    }, espera);
+  }
+  // Incluye las imágenes del HTML, CSS y recursos dinámicos de los personajes.
+  Promise.all(recursos.map(cargarImagen)).then(finalizar);
+  setTimeout(finalizar, tiempoMaximo);
+})();
+</script>
+
 <script>
 "use strict";
 
@@ -237,6 +354,8 @@ const DURACION_NIVEL = 90000; // ORIGINAL: 90 segundos, empieza en 0%
 const DURACION_FINAL = 8000; // Cinemática final de 8 segundos
 const DURACION_CINEMATICA = 6000;
 const DURACION_ESCENA_FINAL = 4000;
+const DURACION_DERROTA = 4000;
+const DURACION_ESCENA_DERROTA = 1000;
 const CANTIDAD_ESCENAS_FINAL = 6;
 const DURACION_SALTO = 800;
 const DURACION_SALTO_GHOST = 850;
@@ -265,9 +384,9 @@ const TIEMPOS_VALLAS = [
   // 0-20%: individuales espaciadas (0-18 s)
   5, 9.2, 13.4, 17.2,
   // 20-50%: mas frecuentes, aun faciles (18-45 s)
-  20.5, 23.8, 27.1, 30.5, 33.9, 37.3, 40.7, 44.0,
+  20.5, 23.8, 27.1, 30.5, 33.9, 37.3, 40.7,
   // 50-70%: lluvia y primeras parejas (45-63 s)
-  47.4, 50.6, 52.5, 56.1, 59.7, 61.6,
+  47.7, 50.6, 52.5, 56.1, 59.7, 61.6,
   // 70-90%: individuales alternadas con parejas (63-81 s)
   65.5, 68.8, 70.7, 74.4, 77.8, 79.7,
   // 90-100%: cierre tranquilo antes del granero (81-90 s)
@@ -277,6 +396,7 @@ const TIEMPOS_VALLAS = [
 /* VARIABLES */
 let estado = "inicio";
 let tiempoNivel = 0;
+let tiempoDerrota = 0;
 let tiempoCinematica = 0;
 let tiempoFinal = 0;
 let tiempoEscenasFinal = 0;
@@ -359,7 +479,7 @@ function sincronizarMusica() {
     else if (escenaFinalActual === 4) reproducirPista(audioFinalSusto);
     else reproducirPista(audioFinalMisty);
   }
-  else if (["inicio", "niveles", "ayuda"].includes(estado)) reproducirPista(audioInicio);
+  else if (["inicio", "niveles", "ayuda", "biblioteca", "archivoNivel1"].includes(estado)) reproducirPista(audioInicio);
   else pararPistas();
 }
 
@@ -445,7 +565,12 @@ function iniciarTormenta() {
 
   tormentaActiva = true;
   escenario.classList.add("tormenta-halloween");
-  siguienteTrueno = tiempoNivel + 1800;
+  // Relámpago especial al comenzar la lluvia.
+  escenario.classList.add("relampago-especial");
+  escenario.classList.add("flash-trueno");
+  tiempoFlash = 850;
+  sonarTrueno();
+  siguienteTrueno = tiempoNivel + 8000;
 }
 
 function actualizarTormenta(dt) {
@@ -458,7 +583,7 @@ function actualizarTormenta(dt) {
     tiempoFlash -= dt;
 
     if (tiempoFlash <= 0) {
-      escenario.classList.remove("flash-trueno");
+      escenario.classList.remove("flash-trueno", "relampago-especial");
       tiempoFlash = 0;
     }
   }
@@ -533,7 +658,9 @@ function limpiarNivel() {
     "mostrar-tutorial",
     "tormenta-halloween",
     "flash-trueno",
-    "final-cinematica"
+    "relampago-especial",
+    "final-cinematica",
+    "derrota-en-escenario", "derrota-fase-1", "derrota-fase-2", "derrota-fase-3", "derrota-fase-4"
   );
 
   actualizarBarra();
@@ -675,23 +802,30 @@ function seTocan(a,b) {
          a.bottom>b.top;
 }
 
-/* DERROTA */
+/* DERROTA: cuatro segundos en el MISMO escenario. */
 function perder() {
-  estado = "derrota";
+  if (estado !== "jugando") return;
+  estado = "cinematicaDerrota";
+  tiempoDerrota = 0;
   pararPistas();
-
-  const porcentaje = Math.min(
-    100,
-    Math.floor(tiempoNivel/DURACION_NIVEL*100)
-  );
-
-  progresoDerrota.textContent = "Recorrido: "+porcentaje+"%";
+  const porcentaje = Math.min(100, Math.floor(tiempoNivel / DURACION_NIVEL * 100));
+  progresoDerrota.textContent = "Recorrido: " + porcentaje + "%";
+  saltando = false;
+  ghostSaltando = false;
+  escenario.classList.remove("saltando", "ghost-saltando", "flash-trueno", "relampago-especial");
+  escenario.classList.add("derrota-en-escenario", "derrota-fase-1");
+}
+function terminarDerrota() {
+  if (estado !== "cinematicaDerrota") return;
+  estado = "derrota";
+  escenario.classList.remove("derrota-en-escenario", "derrota-fase-1", "derrota-fase-2", "derrota-fase-3", "derrota-fase-4");
   escenario.classList.add("pausado");
   location.hash = "#derrota";
 }
 
 /* CINEMATICA FINAL - TOM Y GHOST ENTRAN AL GRANERO */
 function ganar() {
+  desbloquearBibliotecaNivel1();
   tiempoNivel = DURACION_NIVEL;
   actualizarBarra();
   estado = "final";
@@ -707,11 +841,13 @@ function ganar() {
   // La puerta está aproximadamente al 38% del ancho de graneropuerta.png.
   const granero = escenario.querySelector(".granero-final");
   const anchoPantalla = escenario.clientWidth;
-  const centroPuerta = -anchoPantalla * .15 + granero.offsetWidth * .38;
+  // El granero termina en left:-15vw y escala 1; apuntar al umbral
+  // sin modificar la altura de los pies ni encoger a los personajes.
+  const centroPuerta = -anchoPantalla * 0.15 + granero.offsetWidth * 0.38;
   const centroTom = tom.offsetLeft + tom.offsetWidth / 2;
   const centroGhost = ghost.offsetLeft + ghost.offsetWidth / 2;
-  escenario.style.setProperty("--avance-tom", (centroPuerta - centroTom) + "px");
-  escenario.style.setProperty("--avance-ghost", (centroPuerta - centroGhost) + "px");
+  escenario.style.setProperty("--avance-tom", `${centroPuerta - centroTom}px`);
+  escenario.style.setProperty("--avance-ghost", `${centroPuerta - centroGhost}px`);
   // El CSS congela el suelo y mueve el granero desde el primer instante.
   escenario.classList.add("final-cinematica");
 }
@@ -775,6 +911,9 @@ function actualizarVallas(dt) {
     }
 
     if (seTocan(rectTom,r) && !saltando) {
+      // La calabaza se rompe y desaparece al producirse el choque.
+      v.elemento.remove();
+      vallas.splice(i, 1);
       perder();
       return;
     }
@@ -804,7 +943,12 @@ function bucle(ahora) {
     estado==="inicio"
   ) return;
 
-  if (estado==="cinematica") {
+  if (estado === "cinematicaDerrota") {
+    tiempoDerrota += dt;
+    const indice = Math.min(3, Math.floor(tiempoDerrota / DURACION_ESCENA_DERROTA));
+    for (let i=1;i<=4;i++) escenario.classList.toggle("derrota-fase-"+i, i===indice+1);
+    if (tiempoDerrota >= DURACION_DERROTA) { terminarDerrota(); return; }
+  } else if (estado==="cinematica") {
     tiempoCinematica += dt;
     // El audio de la cinemática ya comenzó al entrar al nivel 1.
 
@@ -864,7 +1008,11 @@ function bucle(ahora) {
 
     actualizarVallas(dt);
 
-    if (estado !== "jugando") return;
+    if (estado !== "jugando") {
+      // El bucle debe continuar durante los 4 segundos de derrota.
+      if (estado === "cinematicaDerrota") animacion = requestAnimationFrame(bucle);
+      return;
+    }
 
     actualizarBarra();
 
@@ -908,8 +1056,15 @@ function continuarJuego() {
 /* NAVEGACION */
 function navegar() {
   const hash = location.hash;
-
-  if (hash==="#jugar") {
+  if (hash !== "#reproductorBiblioteca") detenerBiblioteca();
+  if (hash !== "#jugar" && hash !== "#derrota" && estado === "cinematicaDerrota") {
+    escenario.classList.remove("derrota-en-escenario", "derrota-fase-1", "derrota-fase-2", "derrota-fase-3", "derrota-fase-4");
+  }
+  if (hash === "#reproductorBiblioteca") {
+    limpiarNivel();
+    estado = "reproductorBiblioteca";
+    iniciarBiblioteca();
+  } else if (hash==="#jugar") {
     if (ultimoHash==="#pausa" && pausado) {
       continuarJuego();
     } else {
@@ -919,7 +1074,8 @@ function navegar() {
     pausarJuego();
   } else if (hash!=="#derrota" && hash!=="#victoria") {
     limpiarNivel();
-    estado = hash === "#niveles" ? "niveles" : hash === "#ayuda" ? "ayuda" : "inicio";
+    estado = hash === "#niveles" ? "niveles" : hash === "#ayuda" ? "ayuda" : hash === "#biblioteca" ? "biblioteca" : hash === "#archivoNivel1" ? "archivoNivel1" : "inicio";
+    if (estado === "biblioteca" || estado === "archivoNivel1") actualizarBiblioteca();
     sincronizarMusica();
   }
 
@@ -977,6 +1133,83 @@ document.addEventListener("visibilitychange",()=>{
     location.hash="#pausa";
   }
 });
+
+
+/* BIBLIOTECA: UNA SOLA HISTORIA QUE CRECE CON EL PROGRESO */
+const CLAVE_BIBLIOTECA = "escapaTom_biblioteca_nivel1_v1";
+const imagenBiblioteca = document.getElementById("imagenCinematicaBiblioteca");
+const tituloBiblioteca = document.getElementById("tituloCinematicaBiblioteca");
+const textoBiblioteca = document.getElementById("textoCinematicaBiblioteca");
+const barraBiblioteca = document.getElementById("barraCinematicaBiblioteca");
+let bibliotecaRaf = null;
+let bibliotecaInicio = 0;
+let bibliotecaIndice = -1;
+let bibliotecaDuracion = 0;
+const ESCENAS_BIBLIOTECA = [
+  {imagen:"historia/historialevel1.png", respaldo:"inicio/fondoinicio.png", titulo:"UNA NOCHE DE HALLOWEEN", texto:"Tom llegó a una misteriosa granja buscando algo dulce...", ms:4000},
+  {imagen:"historia/historialevel2.png", respaldo:"inicio/fondoinicio.png", titulo:"¡DULCE O TRUCO!", texto:"La señora de la granja llenó su calabaza de caramelos. ¡Qué suerte!", ms:4000},
+  {imagen:"historia/historialevel3.png", respaldo:"inicio/fondoinicio.png", titulo:"LA TENTACIÓN", texto:"Tom no aguantó las ganas y se sentó entre los pastizales a contar sus dulces...", ms:4000},
+  {imagen:"historia/historialevel4.png", respaldo:"inicio/fondoinicio.png", titulo:"ALGUIEN LO OBSERVA...", texto:"Pero Tom estaba tan distraído que no vio lo que se escondía detrás de él...", ms:4000},
+  {imagen:"historia/historialevel5.png", respaldo:"inicio/fondoinicio.png", titulo:"¡CORRE, TOM!", texto:"¡ERA GHOST FACE! ¡Corré hacia el granero antes de que te alcance!", ms:4000},
+  ...Array.from({length:6},(_,i)=>({imagen:`finallevel1/escenafinal${i+1}.png`,respaldo:"inicio/fondoinicio.png",titulo:["¡CORRE, TOM!","¡SILENCIO!","GHOST SE ACERCA","¿YA SE FUE?","¡GHOST!","¡SORPRESA!"][i],texto:["¡El granero está adelante!","No hagas ni un ruido...","Cada vez está más cerca...","¡Uf! Creo que ya se fue...","¡¡¡AAAAAAAH!!!","¡Misty! ¿Eras vos? ¡Feliz Halloween!"][i],ms:4000}))
+];
+function bibliotecaGanada(){try{return localStorage.getItem(CLAVE_BIBLIOTECA)==="si"}catch(e){return false}}
+function desbloquearBibliotecaNivel1(){
+  try {localStorage.setItem(CLAVE_BIBLIOTECA,"si")} catch(e){}
+  actualizarBiblioteca();
+}
+function actualizarBiblioteca(){
+  const ganada = bibliotecaGanada();
+  const progreso = document.getElementById("bibliotecaProgresoExtra");
+  const contador = document.getElementById("bibliotecaContadorCompleto");
+  const estadoHistoria = document.getElementById("bibliotecaEstado");
+  const descripcion = document.getElementById("bibliotecaDescripcion");
+  if (progreso) {
+    progreso.classList.toggle("completa", ganada);
+    progreso.querySelectorAll("span").forEach((segmento, indice) => {
+      segmento.classList.toggle("desbloqueado", indice < (ganada ? 11 : 4));
+    });
+  }
+  if (contador) contador.textContent = ganada ? "11/11" : "4/11";
+  if (estadoHistoria) estadoHistoria.textContent = ganada ? "HISTORIA COMPLETA" : "PRÓLOGO DISPONIBLE";
+  if (descripcion) descripcion.textContent = ganada ? "¡Descubrí la persecución y el secreto del granero!" : "Descubrí qué ocurrió antes de la persecución...";
+}
+function detenerBiblioteca(){
+  if(bibliotecaRaf!==null){cancelAnimationFrame(bibliotecaRaf);bibliotecaRaf=null}
+  bibliotecaIndice=-1;
+}
+function iniciarBiblioteca(){
+  detenerBiblioteca();
+  pararPistas();
+  const escenas=bibliotecaGanada()?ESCENAS_BIBLIOTECA:ESCENAS_BIBLIOTECA.slice(0,4);
+  bibliotecaDuracion=escenas.reduce((s,e)=>s+e.ms,0);
+  bibliotecaInicio=performance.now();
+  let anterior=-1;
+  const pintar=(ahora)=>{
+    if(location.hash!=="#reproductorBiblioteca")return;
+    const transcurrido=Math.max(0,ahora-bibliotecaInicio);
+    barraBiblioteca.style.width=Math.min(100,transcurrido/bibliotecaDuracion*100)+"%";
+    if(transcurrido>=bibliotecaDuracion){location.hash="#archivoNivel1";return}
+    let acumulado=0,indice=0;
+    while(indice<escenas.length-1 && transcurrido>=acumulado+escenas[indice].ms){acumulado+=escenas[indice].ms;indice++}
+    if(indice!==anterior){
+      const escena=escenas[indice];
+      imagenBiblioteca.onerror=()=>{imagenBiblioteca.onerror=null;imagenBiblioteca.src=escena.respaldo};
+      imagenBiblioteca.src=escena.imagen;
+      tituloBiblioteca.textContent=escena.titulo;
+      textoBiblioteca.textContent=escena.texto;
+      // Reinicia la entrada animada de los subtítulos en cada escena.
+      const subtitulos = tituloBiblioteca.parentElement;
+      subtitulos.classList.remove("subtitulos-animados");
+      void subtitulos.offsetWidth;
+      subtitulos.classList.add("subtitulos-animados");
+      anterior=indice;
+    }
+    bibliotecaRaf=requestAnimationFrame(pintar);
+  };
+  bibliotecaRaf=requestAnimationFrame(pintar);
+}
+actualizarBiblioteca();
 
 /* INICIO */
 if (location.hash==="#jugar") {
